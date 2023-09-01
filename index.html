@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socio_Gram</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            
+        }
+
+        :root {
+            --text-color: #FFFFFE;
+            --bg-color: #57565B; /*background color of entire webpage*/
+            --card-color: #0C050D;
+            --accent-color: #1A5DB4;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--bg-color);
+        }
+
+        .card{
+            width: auto;
+            background-color: var(--card-color);
+            border-radius: 5px;
+            margin : 10px;
+            box-shadow: 2px 2px 10px black;
+        }
+
+        .card:hover {
+            box-shadow: 2px 2px 8px var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        .card-header img{
+            width: 50%;
+            margin-left: 25%;
+            border-radius: 50%;
+            object-fit: cover;
+            border-style: solid;
+            border-color: var(--accent-color);
+        }
+
+        .card-content{
+            padding: 10px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .button{
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            padding: 10px;
+            font-size: medium;
+            cursor: pointer;
+        }
+        
+        .margin-for-container{
+            margin: 5px;
+        }
+
+        .margin-for-container:hover{
+            transform: translateY(-1px);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="flex">
+        <div class="card ">
+            <div class="card-header margin-for-container">
+                <img src="" alt="profile picture" id="profile-picture">
+            </div>
+            <div class="card-content">
+                <h3 id="username" class="margin-for-container"></h3>
+                <h1 id="name" class="margin-for-container"></h1>
+                <h4 id="gender" class="margin-for-container"></h4>
+                <h4 id="dob" class="margin-for-container"></h4>
+                <h4 id="address" class="margin-for-container"></h4>
+                <h4 id="email-id" class="margin-for-container"></h4>
+                <button class=" button margin-for-container" onclick="reload()" >Next User</button>
+            </div>
+        </div>
+    
+    </div>
+    
+    <script>
+
+    // function to reload the window
+    function reload() {
+        window.location.reload();
+    }
+
+    // call fetchData function whenever window gets loaded
+    window.addEventListener("load", () => fetchData());
+
+    // function to fetchData from the API
+    async function fetchData() {
+        const res = await fetch("https://randomuser.me/api/");
+        const data = await res.json();
+        fillDataInCard(data.results[0]);
+    }
+
+    // function to fill data fetched from the API to webpage card
+    function fillDataInCard(element){
+        const profile_picture=document.querySelector('#profile-picture');
+        const username=document.querySelector('#username');
+        const name=document.querySelector("#name");
+        const gender=document.querySelector('#gender');
+        const dob=document.querySelector('#dob');
+        const address=document.querySelector('#address');
+        const email_id=document.querySelector('#email-id');
+
+        profile_picture.src=element.picture.large;
+        username.innerHTML=`UserName: ${element.login.username}`;
+        name.innerHTML=`${element.name.title}.  ${element.name.first} ${element.name.last}`;
+        gender.innerHTML=`gender: ${element.gender}`;
+
+        const date = new Date(element.dob.date).toLocaleString("en-US", {
+        timeZone: "Asia/Jakarta",
+        });
+
+        dob.innerHTML=`dob: ${date}`;
+        address.innerHTML=`address: ${element.location.city}, ${element.location.state}, ${element.location.country}`;
+        email_id.innerHTML=`Email: ${element.email}`;
+    }
+    </script>
+</body>
+</html>
